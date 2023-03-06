@@ -21,7 +21,7 @@
 #include "EasyVR.h"
 
 EasyVR easyvr(port);
-
+//EasyPins
 int8_t bits = 4;
 int8_t set = 0;
 int8_t group = 0;
@@ -35,10 +35,19 @@ bool useGrammars = false;
 bool useTokens = false;
 bool isSleeping = false;
 bool isBusy = false;
-
+//MovePin
+int IN1=8;
+int IN2=7;
+int IN3=6;
+int IN4=5;
+int ENA=10;
+int ENB=9;
 void setup()
 {
-  // setup PC serial port
+  for (int i = 5; i <11; i ++) 
+  {
+     pinMode(i, OUTPUT);   
+  }
   pcSerial.begin(9600);
 bridge:
   // bridge mode?
@@ -147,9 +156,12 @@ bridge:
   easyvr.setTimeout(5);
   lang = EasyVR::ENGLISH;
   easyvr.setLanguage(lang);
+  easyvr.setMicDistance(3);
   // use fast recognition
   easyvr.setTrailingSilence(EasyVR::TRAILING_MIN);
   easyvr.setCommandLatency(EasyVR::MODE_FAST);
+  easyvr.setKnob(EasyVR::LOOSER);
+  easyvr.setLevel(EasyVR::EASY);
 
   int16_t count = 0;
 
@@ -251,7 +263,7 @@ bridge:
       }
     }
   }
-  group = 16;
+  group = 1;
   
   mask |= 1; // force to use trigger (mixed SI/SD)
   useCommands = true;
@@ -313,6 +325,7 @@ void loop() {
   else
   {
     idx = easyvr.getCommand();
+    pcSerial.print((idx));
     if (idx >= 0)
     {
       pcSerial.print(F("Command: "));
@@ -321,11 +334,48 @@ void loop() {
       {
         pcSerial.print(F(" = "));
         pcSerial.println(name);
-      if(idx == 0){
-        pcSerial.println("UMP");
-      }
       if(idx == 1){
-        pcSerial.println("UMP IS MOVING");
+        bool Flag = true;
+        while (Flag){
+          pcSerial.println("UMP IS ROTATING");
+        digitalWrite(IN1,LOW);
+        digitalWrite(IN2,HIGH);
+        analogWrite(ENA,255); 
+        digitalWrite(IN3,HIGH);
+        digitalWrite(IN4,LOW); 
+        analogWrite(ENB,255); 
+        delay(10000);
+        analogWrite(ENA,0); 
+        analogWrite(ENB,0);
+        digitalWrite(IN1,HIGH);
+        digitalWrite(IN2,LOW);
+        analogWrite(ENA,255); 
+        digitalWrite(IN3,LOW);
+        digitalWrite(IN4,HIGH); 
+        analogWrite(ENB,255); 
+        delay(10000);
+        analogWrite(ENA,0); 
+        analogWrite(ENB,0);
+          Flag = false;
+        }
+         
+      }
+      if(idx == 2){
+        bool Flag = true;
+        while (Flag){
+          pcSerial.println("UMP IS MOVING");
+          digitalWrite(IN1,LOW);
+          digitalWrite(IN2,HIGH);
+          analogWrite(ENA,255); 
+          digitalWrite(IN3,LOW);
+          digitalWrite(IN4,HIGH); 
+          analogWrite(ENB,255); 
+          delay(10000);
+          analogWrite(ENA,0); 
+          analogWrite(ENB,0);
+          Flag = false;
+        }
+        
       }
       
       
