@@ -1,36 +1,50 @@
-// подключите один мотор к клемме: M1+ и M1-
-// а второй к клемме: M2+ и M2-
-// Motor shield использует четыре контакта 4, 5, 6, 7 для управления моторами 
-// 4 и 7 — для направления, 5 и 6 — для скорости
-#define SPEED_1      5 
-#define DIR_1        4
- 
-#define SPEED_2      6
-#define DIR_2        7
- 
-void setup() {
-  // настраиваем выводы платы 4, 5, 6, 7 на вывод сигналов 
-  for (int i = 4; i < 8; i++) {     
-    pinMode(i, OUTPUT);
-  }
-} 
- 
-void loop() {
-  // устанавливаем направление мотора «M1» в одну сторону
-  
-  
-  
- 
-  // устанавливаем направление мотора «M1» в другую сторону
-  digitalWrite(DIR_1, LOW);
-  analogWrite(SPEED_1, 255);
-  digitalWrite(DIR_2, HIGH);
-  analogWrite(SPEED_2, 255);
-  // ждём одну секунду
-  delay(1000);
-  // выключаем первый мотор
-  analogWrite(SPEED_1, 0);
-  analogWrite(SPEED_2, 0);
- 
+#include <Servo.h>
+int IN1=8;
+int IN2=9;
+int IN3=7;
+int IN4=5;
+int ENA=10;
+int ENB=6;
+Servo highright;
+Servo highleft;
+Servo lowleft;
+Servo lowright;
+void setup()
+{
+ for (int i = 5; i <11; i ++) 
+   {
+     pinMode(i, OUTPUT);   
+   }
+  highright.attach(12);
+  lowright.attach(13);
+  highleft.attach(4);
+  lowright.attach(3);
+}
+void loop()
+{
+  /*
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
+  analogWrite(ENA,255); 
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,HIGH); 
+  analogWrite(ENB,255); 
+  delay(10000);
+  analogWrite(ENA,0); 
+  analogWrite(ENB,0); 
+  delay(5000); 
+  digitalWrite(IN1,LOW);
+  digitalWrite(IN2,HIGH);
+  analogWrite(ENA,255); 
+  digitalWrite(IN3,LOW);
+  digitalWrite(IN4,HIGH); 
+  analogWrite(ENB,255); 
+  delay(10000);
+  analogWrite(ENA,0); 
+  analogWrite(ENB,0); 
+  delay(5000); 
+  */
+  lowleft.write(180);
+  lowleft.write(180);
   
 }
